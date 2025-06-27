@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lukulu Day Secondary School Notice</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    :root {
+      --primary: #0071e3;
+      --background: linear-gradient(135deg, #e0e7ff 0%, #f8f8f8 100%);
+      --card-bg: #fff;
+      --section-border: #e0e7ff;
+      --focus-outline: #ffd600;
+      --success: #33c481;
+    }
+    html, body {
+      min-height: 100vh;
+      background: var(--background);
+      font-family: system-ui, sans-serif;
+      color: #1d1d1f;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      max-width: 650px;
+      margin: 32px auto;
+      padding: 16px 6px;
+    }
+    h1 {
+      text-align: center;
+      font-weight: 700;
+      font-size: 2rem;
+      color: var(--primary);
+      margin: 0 0 0 0;
+      padding: 10px 0 0 0;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.07);
+      letter-spacing: -0.5px;
+    }
+    .last-updated {
+      text-align: center;
+      font-size: 0.99rem;
+      color: #888;
+      font-style: italic;
+      margin: 4px 0 18px 0;
+    }
+    .section {
+      background: var(--card-bg);
+      border-radius: 14px;
+      margin-bottom: 18px;
+      border: 1.2px solid var(--section-border);
+      overflow: hidden;
+      box-shadow: 0 2px 12px 0 rgba(0,0,0,0.07);
+      transition: box-shadow 0.18s;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px 10px 20px;
+      font-size: 1.07rem;
+      font-weight: 600;
+      color: var(--primary);
+      border-bottom: 1px solid #e0e7ff60;
+      background: #f8fafd;
+      cursor: pointer;
+      user-select: none;
+      outline: none;
+      position: relative;
+      transition: background 0.16s;
+    }
+    .section-header:focus, .section-header:hover {
+      background: #e5f0ff;
+      outline: 2px solid var(--focus-outline);
+    }
+    .section-header .expand-icon {
+      margin-left: auto;
+      font-size: 1.3em;
+      color: #aaa;
+      transition: transform 0.22s, color 0.16s;
+    }
+    .section.active .section-header .expand-icon {
+      transform: rotate(90deg);
+      color: var(--primary);
+    }
+    .section.active .section-header {
+      background: #d3eaff;
+      border-left: 4px solid var(--primary);
+    }
+    ul.section-list {
+      list-style: none;
+      margin: 0;
+      padding: 0 20px 0 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: max-height 0.22s, opacity 0.16s;
+    }
+    .section.active ul.section-list {
+      padding: 12px 20px 14px 40px;
+      max-height: 300px;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    li.section-list-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+      color: #555a6a;
+      font-weight: 500;
+      transition: color 0.13s;
+    }
+    li.section-list-item .emoji {
+      font-size: 1.13em;
+      margin-right: 2px;
+    }
+    li.section-list-item .badge {
+      margin-left: 8px;
+      background: var(--success);
+      color: #fff;
+      font-size: 0.85em;
+      padding: 2px 7px;
+      border-radius: 8px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      vertical-align: middle;
+    }
+    .footer {
+      text-align: center;
+      font-size: 0.97rem;
+      color: #888;
+      margin-top: 38px;
+      border-radius: 12px;
+      padding: 10px;
+      background: #f5f8fa;
+      box-shadow: 0 1px 8px 0 #0071e310;
+    }
+    .footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.13rem;
+        padding: 6px 0 0 0;
+      }
+      .footer {
+        font-size: 0.92rem;
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Lukulu Day Secondary School Notice</h1>
+  <div class="last-updated" id="lastUpdated"></div>
+
+  <main>
+    <div class="section">
+      <div class="section-header" tabindex="0" aria-expanded="false" aria-controls="news-list">
+        <span class="emoji">📢</span> News & Updates
+        <span class="expand-icon">▶</span>
+      </div>
+      <ul class="section-list" id="news-list">
+        <li class="section-list-item"><span class="emoji">📰</span> Announcements <span class="badge">New</span></li>
+        <li class="section-list-item"><span class="emoji">📅</span> Upcoming Events</li>
+        <li class="section-list-item"><span class="emoji">⚠️</span> Important Notices</li>
+        <li class="section-list-item"><span class="emoji">🗓️</span> Important Dates</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-header" tabindex="0" aria-expanded="false" aria-controls="academics-list">
+        <span class="emoji">🎓</span> Academics
+        <span class="expand-icon">▶</span>
+      </div>
+      <ul class="section-list" id="academics-list">
+        <li class="section-list-item"><span class="emoji">📝</span> Assignments</li>
+        <li class="section-list-item"><span class="emoji">🏅</span> Exam Results</li>
+        <li class="section-list-item"><span class="emoji">📚</span> Course Materials</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-header" tabindex="0" aria-expanded="false" aria-controls="activities-list">
+        <span class="emoji">⭐</span> Extracurricular Activities
+        <span class="expand-icon">▶</span>
+      </div>
+      <ul class="section-list" id="activities-list">
+        <li class="section-list-item"><span class="emoji">⚽</span> Sports</li>
+        <li class="section-list-item"><span class="emoji">🔬</span> JETS</li>
+        <li class="section-list-item"><span class="emoji">🏛️</span> Parliament Club</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-header" tabindex="0" aria-expanded="false" aria-controls="info-list">
+        <span class="emoji">ℹ️</span> General Information
+        <span class="expand-icon">▶</span>
+      </div>
+      <ul class="section-list" id="info-list">
+        <li class="section-list-item"><span class="emoji">🛡️</span> Safety Guidelines</li>
+        <li class="section-list-item"><span class="emoji">📖</span> Library Resources</li>
+        <li class="section-list-item"><span class="emoji">☎️</span> <a href="tel:+260123456789">Contact Information</a></li>
+        <li class="section-list-item"><span class="emoji">📍</span> Geographical Location</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer class="footer">
+    &copy; 2025 Lukulu Day Secondary School<br>
+    For inquiries, email: <a href="mailto:info@lukuluday.edu.zm">info@lukuluday.edu.zm</a>
+  </footer>
+
+  <script>
+    // Collapsible sections
+    document.querySelectorAll('.section-header').forEach(function(header){
+      header.addEventListener('click', function() {
+        toggleSection(header);
+      });
+      header.addEventListener('keydown', function(e){
+        if(e.key === "Enter" || e.key === " "){
+          e.preventDefault();
+          toggleSection(header);
+        }
+      });
+    });
+    function toggleSection(header) {
+      const section = header.parentElement;
+      const expanded = section.classList.toggle('active');
+      header.setAttribute('aria-expanded', expanded);
+    }
+    // Last updated timestamp
+    document.getElementById('lastUpdated').textContent =
+      "School notice board last updated: " + new Date().toLocaleString();
+
+    // Optionally: Expand first section by default for better UX
+    document.querySelector('.section').classList.add('active');
+    document.querySelector('.section-header').setAttribute('aria-expanded', 'true');
+  </script>
+</body>
+</html>
