@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>School Notice Board</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    :root {
+      --mdc-primary: #1976d2;
+      --mdc-secondary: #33c481;
+      --mdc-bg: #f7fafd;
+      --mdc-surface: #fff;
+      --mdc-radius: 12px;
+      --mdc-shadow: 0 2px 8px 0 rgba(25, 118, 210, 0.08), 0 1.5px 6px 0 rgba(60,64,67,0.09);
+      --glass-header-bg: rgba(255,255,255,0.22);
+      --glass-shadow: 0 8px 32px 0 rgba(31,38,135,0.13);
+      --glass-border: 1.5px solid rgba(255,255,255,0.32);
+      --glass-blur: blur(14px);
+      --active-section-header-bg: #1976d2;
+      --active-section-header-color: #fff;
+      --active-section-shadow: 0 4px 16px 0 rgba(25, 118, 210, 0.13), 0 1.5px 7px 0 rgba(60,64,67,0.11);
+      --active-card-bg: #e3f2fd;
+    }
+    html, body { height: 100%; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: 'Roboto', Arial, sans-serif;
+      background: var(--mdc-bg);
+      color: #202124;
+    }
+    .hybrid-appbar {
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      background: var(--glass-header-bg);
+      color: var(--mdc-primary);
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      height: 58px;
+      border-radius: 0 0 var(--mdc-radius) var(--mdc-radius);
+      box-shadow: var(--glass-shadow);
+      border-bottom: var(--glass-border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .hybrid-title {
+      font-size: 1.32em;
+      font-weight: 700;
+      flex: 1;
+      text-align: center;
+      letter-spacing: -.5px;
+      color: var(--mdc-primary);
+      text-shadow: 0 2px 10px #fff9;
+    }
+    .hybrid-icon-btn {
+      border: none;
+      background: none;
+      outline: none;
+      cursor: pointer;
+      color: var(--mdc-primary);
+      font-size: 1.5em;
+      padding: 0 10px;
+      transition: color 0.12s;
+      border-radius: 12px;
+    }
+    .hybrid-icon-btn:focus, .hybrid-icon-btn:active {
+      background: #e3f0fe;
+      color: var(--mdc-secondary);
+    }
+    .glass-card {
+      margin: 32px auto 18px auto;
+      max-width: 520px;
+      padding: 34px 1.5em 26px 1.5em;
+      background: var(--glass-header-bg);
+      border-radius: var(--mdc-radius);
+      box-shadow: var(--glass-shadow);
+      border: var(--glass-border);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      text-align: center;
+    }
+    .glass-card-headline {
+      font-size: 2.1em;
+      font-weight: 900;
+      color: var(--mdc-primary);
+      letter-spacing: -0.5px;
+      margin-bottom: 0.15em;
+      margin-top: 0;
+      font-family: 'Roboto', Arial, sans-serif;
+      text-shadow: 0 2px 12px #fff8, 0 1px 2px #0001;
+    }
+    .hybrid-banner {
+      margin: 0 auto 18px auto;
+      max-width: 520px;
+      padding: 16px 1.5em 13px 1.5em;
+      background: var(--glass-header-bg);
+      border-radius: var(--mdc-radius);
+      box-shadow: var(--glass-shadow);
+      border: var(--glass-border);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      text-align: left;
+    }
+    .hybrid-banner-title {
+      font-size: 1.13em;
+      font-weight: 600;
+      color: var(--mdc-primary);
+      margin-bottom: 7px;
+      letter-spacing: 0.08em;
+      text-shadow: 0 1px 8px #fff8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hybrid-banner ul {
+      margin: 0 0 0 1.1em;
+      padding: 0;
+      color: #202124;
+      font-size: 1em;
+      list-style: disc;
+    }
+    .mdc-container {
+      max-width: 520px;
+      margin: 0 auto 0 auto;
+      background: var(--mdc-surface);
+      border-radius: var(--mdc-radius);
+      box-shadow: var(--mdc-shadow);
+      border: 1px solid #e3e7ec;
+      padding: 20px 16px 24px 16px;
+    }
+    .mdc-credit {
+      text-align: right;
+      font-size: 0.97em;
+      color: #7a8;
+      margin-top: 10px;
+      margin-bottom: 2px;
+      font-style: italic;
+    }
+    .mdc-updated {
+      text-align: right;
+      font-size: 0.94em;
+      color: #556a;
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+    .mdc-section {
+      margin-top: 22px;
+      border-radius: var(--mdc-radius);
+      background: var(--mdc-surface);
+      box-shadow: var(--mdc-shadow);
+      margin-bottom: 18px;
+      overflow: hidden;
+      border: 1px solid #e3e7ec;
+      transition: box-shadow 0.12s, background 0.14s;
+    }
+    .mdc-section-header {
+      background: #e3f2fd;
+      display: flex;
+      align-items: center;
+      padding: 13px 16px;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 500;
+      font-size: 1em;
+      color: var(--mdc-primary);
+      outline: none;
+      border-bottom: 1px solid #e3e7ec;
+      transition: background 0.11s, color 0.11s, box-shadow 0.13s;
+      position: relative;
+      z-index: 1;
+    }
+    .mdc-section-header .material-icons {
+      margin-right: 10px;
+      transition: color 0.13s;
+    }
+    .mdc-section-header .expand {
+      margin-left: auto;
+      transition: transform 0.18s, color 0.13s;
+      color: #888;
+    }
+    .mdc-section.active .mdc-section-header {
+      background: var(--active-section-header-bg);
+      color: var(--active-section-header-color);
+      box-shadow: var(--active-section-shadow);
+    }
+    .mdc-section.active .mdc-section-header .expand,
+    .mdc-section.active .mdc-section-header .material-icons {
+      color: #fff;
+    }
+    .mdc-section.active {
+      background: var(--active-card-bg);
+      box-shadow: var(--active-section-shadow);
+    }
+    .mdc-section-list {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      padding: 0 18px;
+      margin: 0;
+      transition: max-height 0.18s, opacity 0.13s, background 0.14s;
+      background: #fff;
+      font-size: 0.99em;
+      list-style: none;
+      border-radius: 0 0 var(--mdc-radius) var(--mdc-radius);
+    }
+    .mdc-section.active .mdc-section-list {
+      max-height: 2000px;
+      opacity: 1;
+      padding: 10px 18px 14px 30px;
+      border-top: 1px solid #e3e7ec;
+      background: var(--active-card-bg);
+      box-shadow: 0 4px 18px 0 rgba(25, 118, 210, 0.07);
+    }
+    .news-category, .academics-category, .activities-category, .info-category {
+      margin-bottom: 8px;
+      border-radius: var(--mdc-radius);
+      box-shadow: var(--mdc-shadow);
+      background: #f7fafd;
+      overflow: hidden;
+      transition: box-shadow 0.12s, background 0.14s;
+      border: 1px solid #e3e7ec;
+    }
+    .news-category-header, .academics-category-header, .activities-category-header, .info-category-header {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 10px 12px;
+      font-weight: 500;
+      color: #1976d2;
+      background: #e3f2fd;
+      border: none;
+      outline: none;
+      width: 100%;
+      transition: background 0.14s, color 0.14s;
+      font-size: 1em;
+    }
+    .news-category-header .material-icons,
+    .academics-category-header .material-icons,
+    .activities-category-header .material-icons,
+    .info-category-header .material-icons {
+      margin-right: 8px;
+      font-size: 1.15em;
+      transition: color 0.13s;
+    }
+    .news-category-header .expand,
+    .academics-category-header .expand,
+    .activities-category-header .expand,
+    .info-category-header .expand {
+      margin-left: auto;
+      transition: transform 0.18s;
+      color: #888;
+    }
+    .news-category.open .news-category-header,
+    .academics-category.open .academics-category-header,
+    .activities-category.open .activities-category-header,
+    .info-category.open .info-category-header {
+      background: #1976d2;
+      color: #fff;
+    }
+    .news-category.open .news-category-header .expand,
+    .news-category.open .news-category-header .material-icons,
+    .academics-category.open .academics-category-header .expand,
+    .academics-category.open .academics-category-header .material-icons,
+    .activities-category.open .activities-category-header .expand,
+    .activities-category.open .activities-category-header .material-icons,
+    .info-category.open .info-category-header .expand,
+    .info-category.open .info-category-header .material-icons {
+      color: #fff;
+    }
+    .news-category-content, .academics-category-content, .activities-category-content, .info-category-content {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.25s, opacity 0.15s;
+      background: #fff;
+      padding: 0 14px;
+      font-size: 0.99em;
+    }
+    .news-category.open .news-category-content,
+    .academics-category.open .academics-category-content,
+    .activities-category.open .activities-category-content,
+    .info-category.open .info-category-content {
+      max-height: 400px;
+      opacity: 1;
+      padding: 12px 14px 14px 34px;
+    }
+    .mdc-badge {
+      background: var(--mdc-secondary);
+      color: #fff;
+      border-radius: 8px;
+      font-size: 0.8em;
+      padding: 2px 6px;
+      margin-left: 6px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      box-shadow: 0 1px 6px #33c48122;
+    }
+    .calendar-event-info {
+      margin: 18px auto 3px auto;
+      background: #fff3cd;
+      border-radius: 10px;
+      border-left: 6px solid #ff9800;
+      box-shadow: 0 2px 12px #ff980044;
+      color: #856404;
+      font-size: 1.09em;
+      text-align: center;
+      min-height: 32px;
+      padding: 12px 7px;
+      word-break: break-word;
+      max-width: 330px;
+      display: none;
+      transition: opacity 0.18s;
+      font-family: inherit;
+    }
+    .calendar-event-info.active {
+      display: block;
+      opacity: 1;
+      animation: fadeInEventInfo 0.18s;
+    }
+    @keyframes fadeInEventInfo {
+      from { opacity: 0; transform: translateY(16px);}
+      to   { opacity: 1; transform: translateY(0);}
+    }
+    .july-calendar { 
+      width: 100%; 
+      border-collapse: collapse;
+      margin-bottom: 12px;
+      background: #e3f2fd;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px #1976d125;
+    }
+    .july-calendar th, .july-calendar td {
+      width: 14.2%;
+      text-align: center;
+      padding: 5px 0;
+      border: 1px solid #bbdefb;
+      font-size: 1em;
+      font-family: inherit;
+      background: #fff;
+      transition: background 0.14s;
+      cursor: pointer;
+      position: relative;
+    }
+    .july-calendar th {
+      background: #1976d2;
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      font-size: 1em;
+      padding: 7px 0;
+    }
+    .july-calendar td.has-event {
+      background: #bbdefb;
+      color: #1565c0;
+      font-weight: bold;
+    }
+    .july-calendar td.selected, .july-calendar td.has-event.selected {
+      background: #33c481;
+      color: #fff;
+      font-weight: bold;
+      box-shadow: 0 0 0 3px #33c48155;
+      z-index: 2;
+    }
+    @media (max-width: 600px) {
+      .glass-card, .hybrid-banner, .mdc-container { max-width: 98vw; padding: 8px 2vw 16px 2vw; }
+      .glass-card-headline { font-size: 1.4em; }
+      .calendar-event-info { max-width: 98vw; }
+    }
+    .academics-folder {
+      margin-bottom: 8px;
+      border-radius: 8px;
+      background: #f6f8fc;
+      box-shadow: 0 1px 4px #1976d111;
+      border: 1px solid #e3e7ec;
+      overflow: hidden;
+      transition: box-shadow 0.12s, background 0.14s;
+    }
+    .academics-folder-header {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 9px 10px;
+      font-weight: 500;
+      color: #1976d2;
+      background: #e3f2fd;
+      border: none;
+      outline: none;
+      width: 100%;
+      transition: background 0.14s, color 0.14s;
+      font-size: 1em;
+    }
+    .academics-folder-header .material-icons {
+      margin-right: 8px;
+      font-size: 1.13em;
+      transition: color 0.13s;
+    }
+    .academics-folder-header .expand {
+      margin-left: auto;
+      transition: transform 0.18s;
+      color: #888;
+    }
+    .academics-folder.open .academics-folder-header {
+      background: #1976d2;
+      color: #fff;
+    }
+    .academics-folder.open .academics-folder-header .expand,
+    .academics-folder.open .academics-folder-header .material-icons {
+      color: #fff;
+    }
+    .academics-folder-content {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.25s, opacity 0.15s;
+      background: #fff;
+      padding: 0 10px;
+      font-size: 0.99em;
+    }
+    .academics-folder.open > .academics-folder-content {
+      max-height: 400px;
+      opacity: 1;
+      padding: 8px 14px 14px 22px;
+    }
+    .empty-folder-message {
+      color:#b71c1c;
+      background:#ffebee;
+      border-left:5px solid #e57373;
+      padding:12px 12px 12px 16px;
+      border-radius:7px;
+      margin-bottom:6px;
+      margin-top:2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="hybrid-appbar">
+    <button class="hybrid-icon-btn" title="Menu" tabindex="0" aria-label="Menu">
+      <span class="material-icons">menu</span>
+    </button>
+    <span class="hybrid-title">Lukulu Day Secondary</span>
+    <button class="hybrid-icon-btn" title="Search" tabindex="0" aria-label="Search">
+      <span class="material-icons">search</span>
+    </button>
+  </div>
+  <div class="glass-card">
+    <div class="glass-card-headline">School Notice Board</div>
+  </div>
+  <div class="hybrid-banner">
+    <div class="hybrid-banner-title">
+      <span class="material-icons" style="vertical-align: middle;">calendar_month</span>
+      Key Upcoming Events
+    </div>
+    <ul>
+      <li><b>July 14:</b> Regional JETS Fair – Venue: Isoka District</li>
+      <li><b>July 21:</b> Grade 12 Provincial Mock Examination</li>
+      <li><b>July 25:</b> Grade 9 Provincial Mock Examination</li>
+    </ul>
+  </div>
+  <div class="mdc-container">
+    <div class="mdc-credit">Project created by: <b>Tumelo Muyowe</b></div>
+    <div class="mdc-updated" id="lastUpdated"></div>
+    <!-- News & Updates Section (collapsible by default) -->
+    <div class="mdc-section" id="news-section">
+      <div class="mdc-section-header" tabindex="0">
+        <span class="material-icons">campaign</span>
+        News & Updates
+        <span class="material-icons expand">chevron_right</span>
+      </div>
+      <div class="mdc-section-list" style="padding:0;">
+        <div class="news-category" id="category-announcements">
+          <div class="news-category-header" tabindex="0">
+            <span class="material-icons">announcement</span>
+            Announcements <span class="mdc-badge">New</span>
+            <span class="material-icons expand">chevron_right</span>
+          </div>
+          <div class="news-category-content">
+            <div style="background: #fff3cd; color: #856404; border-left: 6px solid #ff9800; border-radius: 7px; box-shadow: 0 2px 12px #ff980044; padding: 20px 14px 17px 20px; margin-bottom: 8px; font-size: 1.11em; font-family: inherit;">
+              <div style="font-weight: 900; font-size: 1.17em; letter-spacing: 0.5px; margin-bottom: 6px;">
+                <span class="material-icons" style="vertical-align: middle; font-size:1.15em; color:#ff9800; margin-right: 5px;">campaign</span>
+                Important Announcement
+              </div>
+              <div style="margin-bottom: 5px; font-weight: 500;">All learners and staff,</div>
+              <div>
+                Please note that there will be a school assembly on
+                <b><i>Monday, July 1st</i></b> at <b><i>13:20 hrs</i></b>.<br>
+                <span style="font-weight: 600; color: #b85c00;">Your attendance is expected.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="news-category" id="category-notices">
+          <div class="news-category-header" tabindex="0">
+            <span class="material-icons">warning</span>
+            Important Notices
+            <span class="material-icons expand">chevron_right</span>
+          </div>
+          <div class="news-category-content">
+            <div style="background: #fdecea; color: #611a15; border-left: 6px solid #e53935; border-radius: 7px; box-shadow: 0 2px 12px #e5393522; padding: 20px 14px 17px 20px; margin-bottom: 8px; font-size: 1.08em; font-family: inherit;">
+              <div style="font-weight: 900; font-size: 1.13em; letter-spacing: 0.5px; margin-bottom: 6px;">
+                <span class="material-icons" style="vertical-align: middle; font-size:1.11em; color:#e53935; margin-right: 5px;">report_problem</span>
+                Important Notice
+              </div>
+              <div style="font-weight: 600; margin-bottom: 7px;">Late Coming</div>
+              <div>
+                To all learners, please make every effort to arrive at school on time. Late coming is discouraged as it can disrupt your learning and overall school experience.<br>
+                Let's work together to maintain punctuality and respect for school time.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="news-category" id="category-dates">
+          <div class="news-category-header" tabindex="0">
+            <span class="material-icons">event_note</span>
+            Important Dates
+            <span class="material-icons expand">chevron_right</span>
+          </div>
+          <div class="news-category-content">
+            <div style="font-weight:500;margin-bottom:8px;">Important Dates: July 2025</div>
+            <div id="calendar-popup-container" style="max-width:340px;">
+              <table class="july-calendar" aria-label="July 2025 Calendar">
+                <thead>
+                  <tr>
+                    <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td></td><td></td><td>1</td><td>2</td><td>3</td>
+                    <td class="has-event" data-event="4">4</td>
+                    <td>5</td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td class="has-event" data-event="7">7</td>
+                    <td class="has-event" data-event="8">8</td>
+                    <td>9</td><td>10</td><td>11</td><td>12</td>
+                  </tr>
+                  <tr>
+                    <td>13</td>
+                    <td class="has-event" data-event="14">14</td>
+                    <td>15</td><td>16</td><td>17</td><td>18</td><td>19</td>
+                  </tr>
+                  <tr>
+                    <td>20</td>
+                    <td class="has-event" data-event="21">21</td>
+                    <td>22</td><td>23</td><td>24</td>
+                    <td class="has-event" data-event="25">25</td>
+                    <td>26</td>
+                  </tr>
+                  <tr>
+                    <td>27</td><td>28</td><td>29</td><td>30</td><td>31</td><td></td><td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div id="calendar-event-info" class="calendar-event-info"></div>
+            </div>
+            <script>
+              document.addEventListener("DOMContentLoaded", function() {
+                const calendar = document.querySelector('.july-calendar');
+                const eventInfoDiv = document.getElementById("calendar-event-info");
+                const eventHtml = {
+                  4: "July 4: <b>Careers Day</b>",
+                  7: "July 7: <b>Heroes Day</b>",
+                  8: "July 8: <b>Unity Day</b>",
+                  14: "July 14: <b>Regional JETS Fair</b><br><small>Venue: Isoka District</small>",
+                  21: "July 21: <b>Grade 12 Provincial Mock Examination</b>",
+                  25: "July 25: <b>Grade 9 Provincial Mock Examination</b>"
+                };
+                function clearEventInfo() {
+                  eventInfoDiv.classList.remove('active');
+                  eventInfoDiv.innerHTML = "";
+                  calendar.querySelectorAll('td.selected').forEach(sel=>sel.classList.remove('selected'));
+                }
+                calendar.querySelectorAll('td.has-event').forEach(td => {
+                  td.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    calendar.querySelectorAll('td.selected').forEach(sel=>sel.classList.remove('selected'));
+                    td.classList.add('selected');
+                    let eventKey = td.getAttribute('data-event');
+                    if (eventHtml[eventKey]) {
+                      eventInfoDiv.innerHTML = eventHtml[eventKey];
+                      eventInfoDiv.classList.add("active");
+                    } else {
+                      clearEventInfo();
+                    }
+                  });
+                });
+                document.addEventListener('click', function(e) {
+                  if (!calendar.contains(e.target) && !eventInfoDiv.contains(e.target)) {
+                    clearEventInfo();
+                  }
+                });
+              });
+            </script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Academics Section -->
+    <div class="mdc-section" id="academics-section">
+      <div class="mdc-section-header" tabindex="0">
+        <span class="material-icons">school</span>
+        Academics
+        <span class="material-icons expand">chevron_right</span>
+      </div>
+      <div class="mdc-section-list" style="padding:0;">
+        <!-- School Times (dropdown card) -->
+        <div class="academics-category" id="school-timetables-category">
+          <div class="academics-category-header" tabindex="0">
+            <span class="material-icons">event</span>
+            School Times
+            <span class="material-icons expand">chevron_right</span>
+          </div>
+          <div class="academics-category-content">
+            <div class="academics-folder" id="school-timetables-folder">
+              <div class="academics-folder-header" tabindex="0">
+                <span class="material-icons">folder</span>
+                School Timetables
+                <span class="material-icons expand">chevron_right</span>
+              </div>
+              <div class="academics-folder-content">
+                <div class="academics-folder" id="school-timetable-folder">
+                  <div class="academics-folder-header" tabindex="0">
+                    <span class="material-icons">folder</span>
+                    School Timetable
+                    <span class="material-icons expand">chevron_right</span>
+                  </div>
+                  <div class="academics-folder-content">
+                    <div class="empty-folder-message">
+                      No School Timetable available at the moment.
+                    </div>
+                  </div>
+                </div>
+                <div class="academics-folder" id="afternoon-school-program-folder">
+                  <div class="academics-folder-header" tabindex="0">
+                    <span class="material-icons">folder</span>
+                    Afternoon School Program
+                    <span class="material-icons expand">chevron_right</span>
+                  </div>
+                  <div class="academics-folder-content">
+                    <div class="empty-folder-message">
+                      No Afternoon School Program available at the moment.
+                    </div>
+                  </div>
+                </div>
+                <div class="academics-folder" id="quiz-timetable-folder">
+                  <div class="academics-folder-header" tabindex="0">
+                    <span class="material-icons">folder</span>
+                    Quiz Timetable
+                    <span class="material-icons expand">chevron_right</span>
+                  </div>
+                  <div class="academics-folder-content">
+                    <div class="empty-folder-message">
+                      No Quiz Timetable available at the moment.
+                    </div>
+                  </div>
+                </div>
+                <!-- JETs Timetable removed as per request -->
+                <div class="academics-folder" id="g9-external-timetable-folder">
+                  <div class="academics-folder-header" tabindex="0">
+                    <span class="material-icons">folder</span>
+                    G9 External Timetable
+                    <span class="material-icons expand">chevron_right</span>
+                  </div>
+                  <div class="academics-folder-content">
+                    <div class="empty-folder-message">
+                      No G9 External Timetable available at the moment.
+                    </div>
+                  </div>
+                </div>
+                <div class="academics-folder" id="gce-timetable-folder">
+                  <div class="academics-folder-header" tabindex="0">
+                    <span class="material-icons">folder</span>
+                    GCE Timetable
+                    <span class="material-icons expand">chevron_right</span>
+                  </div>
+                  <div class="academics-folder-content">
+                    <div class="empty-folder-message">
+                      No GCE Timetable available at the moment.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="academics-folder" id="provincial-mock-folder">
+              <div class="academics-folder-header" tabindex="0">
+                <span class="material-icons">folder</span>
+                Provincial Mock Examination Timetables
+                <span class="material-icons expand">chevron_right</span>
+              </div>
+              <div class="academics-folder-content">
+                <div class="empty-folder-message">
+                  No Provincial Mock Examination Timetables available at the moment.
+                </div>
+              </div>
+            </div>
+            <div class="academics-folder" id="ecz-folder">
+              <div class="academics-folder-header" tabindex="0">
+                <span class="material-icons">folder</span>
+                Examination Council of Zambia Timetables
+                <span class="material-icons expand">chevron_right</span>
+              </div>
+              <div class="academics-folder-content">
+                <div class="empty-folder-message">
+                  No Examination Council of Zambia Timetables available at the moment.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Assignments -->
+        <div class="academics-category">
+          <div class="academics-category-header" tabindex="0">
+            <span class="material-icons">assignment</span>
+            Assignments
+            <span class="material-icons expand">chevron_right</span>
+          </div>
+          <div class="academics-category-content"></div>
+        </div>
+        <!-- Exam Results -->
+        <div class="academics-category">
+          <div class="academics-category-header" tabindex="0">
+            <span class="material-icons">emoji_events</span>
+            Exam Results
+            <span class="material-icons expand">chevron_right</span>
+          </div>
+          <div class="academics-category-content"></div>
+        </div>
+        <!-- Resources -->
+        <div class="academics-category">
+          <div class="academics-category-header" tabindex="0">
+            <span class="material-icons">menu_book</span>
+            Resources
+            <span class="material-icons expand">chevron_right</span>
+          </div>
+          <div class="academics-category-content">
+            <!-- Resources folders -->
+            <div class="academics-folder">
+              <div class="academics-folder-header" tabindex="0">
+                <span class="material-icons">folder</span>
+                Books
+                <span class="material-icons expand">chevron_right</span>
+              </div>
+              <div class="academics-folder-content">
+                <div class="empty-folder-message">No Books available at the moment.</div>
+              </div>
+            </div>
+            <div class="academics-folder">
+              <div class="academics-folder-header" tabindex="0">
+                <span class="material-icons">folder</span>
+                Syllabi
+                <span class="material-icons expand">chevron_right</span>
+              </div>
+              <div class="academics-folder-content">
+                <div class="empty-folder-message">No Syllabi available at the moment.</div>
+              </div>
+            </div>
+            <div class="academics-folder">
+              <div class="academics-folder-header" tabindex="0">
+                <span class="material-icons">folder</span>
+                Schemes of Work
+                <span class="material-icons expand">chevron_right</span>
+              </div>
+              <div class="academics-folder-content">
+                <div class="empty-folder-message">No Schemes of Work available at the moment.</div>
+              </div>
+            </div>
+            <div class="academics-folder">
+              <div class="academics-folder-header" tabindex="0">
+                <span class="material-icons">folder</span>
+                Past Papers
+                <span class="material-icons expand">chevron_right</span>
+              </div>
+              <div class="academics-folder-content">
+                <div class="empty-folder-message">No Past Papers available at the moment.</div>
+              </div>
+            </div>
+            <div class="academics-folder">
+              <div class="academics-folder-header" tabindex="0">
+                <span class="material-icons">folder</span>
+                Educational Websites
+                <span class="material-icons expand">chevron_right</span>
+              </div>
+              <div class="academics-folder-content">
+                <div class="empty-folder-message">No Educational Websites available at the moment.</div>
+              </div>
+            </div>
+            <div class="academics-folder">
+              <div class="academics-folder-header" tabindex="0">
+                <span class="material-icons">folder</span>
+                Notes
+                <span class="material-icons expand">chevron_right</span>
+              </div>
+              <div class="academics-folder-content">
+                <div class="empty-folder-message">No Notes available at the moment.</div>
+              </div>
+            </div>
+            <div class="academics-folder">
+              <div class="academics-folder-header" tabindex="0">
+                <span class="material-icons">folder</span>
+                Study Guides
+                <span class="material-icons expand">chevron_right</span>
+              </div>
+              <div class="academics-folder-content">
+                <div class="empty-folder-message">No Study Guides available at the moment.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Beyond Academics Section (renamed from Extracurricular Activities) -->
+    <div class="mdc-section" id="activities-section">
+      <div class="mdc-section-header" tabindex="0">
+        <span class="material-icons">star</span>
+        Beyond Academics
+        <span class="material-icons expand">chevron_right</span>
+      </div>
+      <div class="mdc-section-list" style="padding:0;">
+        <div class="activities-category">
+          <div class="activities-category-header" tabindex="0">
+            <span class="material-icons">sports_soccer</span>
+            Sports
+            <span class="material-icons expand">chevron_right</span>
+          </div>
+          <div class="activities-category-content">
+            <div>No sports activities listed yet.</div>
+          </div>
+        </div>
+        <div class="activities-category">
+          <div class="activities-category-header" tabindex="0">
+            <span class="material-icons">science</span>
+            JETS
+            <span class="material-icons expand">chevron_right</span>
+          </div>
+          <div class="activities-category-content">
+            <div>No JETS club events listed yet.</div>
+          </div>
+        </div>
+        <div class="activities-category">
+          <div class="activities-category-header" tabindex="0">
+            <span class="material-icons">account_balance</span>
+            Parliament Club
+            <span class="material-icons expand">chevron_right</span>
+          </div>
+          <div class="activities-category-content">
+            <div>No Parliament Club activities listed yet.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- General Information Section -->
+    <div class="mdc-section" id="info-section">
+      <div class="mdc-section-header" tabindex="0">
+        <span class="material-icons">info</span>
+        General Information
+        <span class="material-icons expand">chevron_right</span>
+      </div>
+      <div class="mdc-section-list" style="padding:0;">
+        <div class="info-category">
+          <div class="info-category-header" tabindex="0">
+            <span class="material-icons">verified_user</span>
+            Safety Guidelines
+            <span class="material-icons expand">chevron_right</span>
+          </div>
+          <div class="info-category-content">
+            <div>No safety guidelines posted yet.</div>
+          </div>
+        </div>
+        <div class="info-category">
+          <div class="info-category-header" tabindex="0">
+            <span class="material-icons">local_library</span>
+            Library Resources
+            <span class="material-icons expand">chevron_right</span>
+          </div>
+          <div class="info-category-content">
+            <div>No library resources listed yet.</div>
+          </div>
+        </div>
+        <div class="info-category">
+          <div class="info-category-header" tabindex="0">
+            <span class="material-icons">phone</span>
+            <a href="tel:+260123456789" style="color:inherit;text-decoration:inherit;">Contact Information</a>
+            <span class="material-icons expand">chevron_right</span>
+          </div>
+          <div class="info-category-content">
+            <div>Phone: <a href="tel:+260123456789">+260123456789</a></div>
+          </div>
+        </div>
+        <div class="info-category">
+          <div class="info-category-header" tabindex="0">
+            <span class="material-icons">location_on</span>
+            <a href="https://maps.app.goo.gl/aGaYjwY2gAsBVC7n8" target="_blank" rel="noopener" style="color:inherit;text-decoration:inherit;">Geographical Location</a>
+            <span class="material-icons expand">chevron_right</span>
+          </div>
+          <div class="info-category-content">
+            <div>Map: <a href="https://maps.app.goo.gl/aGaYjwY2gAsBVC7n8" target="_blank" rel="noopener">Open in Google Maps</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mdc-footer">
+      &copy; 2025 Lukulu Day Secondary School<br>
+      For inquiries, email: <a href="mailto:info@lukuluday.edu.zm">info@lukuluday.edu.zm</a>
+    </div>
+  </div>
+  <script>
+    // Section expand/collapse
+    document.querySelectorAll('.mdc-section-header').forEach(header => {
+      header.addEventListener('click', () => toggleSection(header));
+      header.addEventListener('keydown', function(e) {
+        if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggleSection(header); }
+      });
+    });
+    function toggleSection(header) {
+      const section = header.parentElement;
+      document.querySelectorAll('.mdc-section').forEach(sec => {
+        if (sec !== section) sec.classList.remove('active');
+      });
+      section.classList.toggle('active');
+      header.querySelector('.expand').setAttribute('aria-expanded', section.classList.contains('active'));
+    }
+    function setupCategoryAccordion(sectionClass, headerClass) {
+      document.querySelectorAll('.' + headerClass).forEach(header => {
+        header.addEventListener('click', () => toggleCategory(header, sectionClass, headerClass));
+        header.addEventListener('keydown', function(e) {
+          if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggleCategory(header, sectionClass, headerClass); }
+        });
+      });
+    }
+    function toggleCategory(header, sectionClass, headerClass) {
+      const category = header.parentElement;
+      document.querySelectorAll('.' + sectionClass).forEach(cat => {
+        if (cat !== category) cat.classList.remove('open');
+      });
+      category.classList.toggle('open');
+      header.querySelector('.expand').setAttribute('aria-expanded', category.classList.contains('open'));
+    }
+    setupCategoryAccordion('news-category', 'news-category-header');
+    setupCategoryAccordion('academics-category', 'academics-category-header');
+    setupCategoryAccordion('activities-category', 'activities-category-header');
+    setupCategoryAccordion('info-category', 'info-category-header');
+    function setupFolderAccordion(folderClass, folderHeaderClass) {
+      document.querySelectorAll('.' + folderHeaderClass).forEach(header => {
+        header.addEventListener('click', () => toggleFolder(header, folderClass, folderHeaderClass));
+        header.addEventListener('keydown', function(e) {
+          if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggleFolder(header, folderClass, folderHeaderClass); }
+        });
+      });
+    }
+    function toggleFolder(header, folderClass, folderHeaderClass) {
+      const folder = header.parentElement;
+      document.querySelectorAll('.' + folderClass).forEach(f => {
+        if (f !== folder) f.classList.remove('open');
+      });
+      folder.classList.toggle('open');
+      header.querySelector('.expand').setAttribute('aria-expanded', folder.classList.contains('open'));
+    }
+    setupFolderAccordion('academics-folder', 'academics-folder-header');
+    function getOrdinal(n){const s=["th","st","nd","rd"],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0]);}
+    function formatDate(d){
+      const months=["January","February","March","April","May","June","July","August","September","October","November","December"];
+      const day=getOrdinal(d.getDate());
+      const month=months[d.getMonth()];
+      const year=d.getFullYear();
+      let hour=d.getHours(),min=d.getMinutes().toString().padStart(2,'0');
+      const ampm=hour>=12?"PM":"AM";
+      hour=hour%12; if(hour===0)hour=12;
+      return `${day} ${month} ${year}, ${hour}:${min} ${ampm}`;
+    }
+    document.getElementById('lastUpdated').textContent = "Last updated: " + formatDate(new Date());
+  </script>
+</body>
+</html>
